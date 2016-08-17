@@ -25,7 +25,7 @@ export default class Messenger extends Component {
       case 'Friends':
         return (<Friends navigator={navigator}/>);
       case 'Messages':
-        return (<Message friend={route.friend}/>);
+        return (<Message navigator={navigator} friend={route.friend}/>);
       default:
         return(<Friends />);
     }
@@ -43,7 +43,6 @@ export default class Messenger extends Component {
         <View style={styles.main}>
           <Navigator
             initialRoute={routes[0]}
-            initialRouteStack={routes}
             renderScene={this.renderScene}
           />
         </View>

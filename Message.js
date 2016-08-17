@@ -11,11 +11,13 @@ import {
 export class Message extends Component {
   constructor(props) {
     super(props);
+
+    messages = this.props.friend.state.messages;
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       text: '',
-      messages: [],
-      messagesList: this.ds.cloneWithRows([])
+      messages,
+      messagesList: this.ds.cloneWithRows(messages)
     };
   }
 
@@ -23,7 +25,10 @@ export class Message extends Component {
     if (text.length == 0)
       return;
 
-    console.log(text);
+    this.props.friend.setState({
+      messages: [text, ...this.state.messages]
+    });
+
     this.setState({
       messages: [text, ...this.state.messages],
       messagesList: this.ds.cloneWithRows([text, ...this.state.messages]),
@@ -32,15 +37,21 @@ export class Message extends Component {
   }
 
   friendName() {
-    console.log('friend name');
-    console.log(this.props);
-    if (this.props.friend)
-      return this.props.friend.props.attrs.name;
+    return this.props.friend.props.attrs.name;
+  }
+
+  back(){
+    this.props.navigator.pop();
   }
 
   render() {
     return (
       <View style={{padding: 10}}>
+        <View style={styles.send}>
+          <TouchableHighlight onPress={this.back.bind(this)}>
+            <Text style={styles.sendText}>Back</Text>
+          </TouchableHighlight>
+        </View>
         <Text>{this.friendName()}</Text>
 
         <TextInput

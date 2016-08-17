@@ -41,6 +41,14 @@ export class Friends extends Component {
 }
 
 class Person extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      messages: []
+    };
+  }
+
   setCurrent() {
     console.log(this.props.attrs.name);
     this.props.friends.conversation(this);
