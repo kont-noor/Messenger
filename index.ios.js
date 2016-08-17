@@ -7,20 +7,45 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
+  Navigator,
   StyleSheet,
   Text,
   TouchableHighlight,
   View
 } from 'react-native';
-import {Message} from './Message.js';
+import {Message} from './Message';
+import {Friends} from './Friends';
 
-class Messenger extends Component {
+export default class Messenger extends Component {
+  renderScene(route, navigator) {
+    console.log(route);
+    console.log(navigator);
+
+    switch(route.title) {
+      case 'Friends':
+        return (<Friends navigator={navigator}/>);
+      case 'Messages':
+        return (<Message friend={route.friend}/>);
+      default:
+        return(<Friends />);
+    }
+  }
+
   render() {
+    const routes = [
+      {title: 'Friends', index: 0},
+      {title: 'Messages', index: 1},
+    ];
+
     return (
       <View style={styles.container}>
         <Text style={styles.heading}>Messenger</Text>
         <View style={styles.main}>
-          <Message />
+          <Navigator
+            initialRoute={routes[0]}
+            initialRouteStack={routes}
+            renderScene={this.renderScene}
+          />
         </View>
         <Text style={styles.copyright}>© Cats-3x, 2016</Text>
       </View>

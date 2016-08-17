@@ -31,9 +31,18 @@ export class Message extends Component {
     });
   }
 
+  friendName() {
+    console.log('friend name');
+    console.log(this.props);
+    if (this.props.friend)
+      return this.props.friend.props.attrs.name;
+  }
+
   render() {
     return (
       <View style={{padding: 10}}>
+        <Text>{this.friendName()}</Text>
+
         <TextInput
           style={{height: 40}}
           placeholder="Message"
