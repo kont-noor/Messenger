@@ -7,6 +7,7 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
+  ListView,
   ScrollView,
   StyleSheet,
   Text,
@@ -32,7 +33,12 @@ class Messenger extends Component {
 class Message extends Component {
   constructor(props) {
     super(props);
-    this.state = {text: '', messages: []};
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.state = {
+      text: '',
+      messages: [],
+      messagesList: this.ds.cloneWithRows([])
+    };
   }
 
   send(text) {
@@ -40,7 +46,11 @@ class Message extends Component {
       return;
 
     console.log(text);
-    this.setState({messages: [text, ...this.state.messages], text: ''});
+    this.setState({
+      messages: [text, ...this.state.messages],
+      messagesList: this.ds.cloneWithRows([text, ...this.state.messages]),
+      text: ''
+    });
   }
 
   render() {
@@ -59,7 +69,11 @@ class Message extends Component {
           </TouchableHighlight>
         </View>
 
-        {this.state.messages.map((m, i) => <Text key={i}>{m}</Text>)}
+        <ListView
+          enableEmptySections={true}
+          dataSource={this.state.messagesList}
+          renderRow={row => <Text>{row}</Text>}
+        />
       </View>
     );
   }
