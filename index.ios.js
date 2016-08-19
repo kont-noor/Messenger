@@ -13,8 +13,8 @@ import {
   TouchableHighlight,
   View
 } from 'react-native';
-import {Message} from './Message';
-import {Friends} from './Friends';
+import {Message} from './src/components/Message';
+import {Friends} from './src/components/Friends';
 
 export default class Messenger extends Component {
   renderScene(route, navigator) {
