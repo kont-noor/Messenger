@@ -8,8 +8,20 @@ import {
 } from 'react-native';
 
 export class Friends extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { friends: [] };
+    this.fetchFriends();
+  }
+
+  fetchFriends() {
+    fetch(`https://graph.facebook.com/me/friends?access_token=${this.props.access_token}`)
+      .then(response => response.json())
+      .then(json => this.setState({friends: json.data}));
+  }
+
   conversation(friend){
-    console.log(this)
     this.props.navigator.push({
       title: 'Messages',
       friend
@@ -17,24 +29,9 @@ export class Friends extends Component {
   }
 
   render() {
-    let friends = [
-      {
-        pic: {
-          uri: 'https://pp.vk.me/c630130/v630130920/437dc/PYAbX_sMCWY.jpg'
-        },
-        name: 'Tamila',
-      },
-      {
-        pic: {
-          uri: 'https://pp.vk.me/c617219/v617219002/1e238/GucMz0baT80.jpg'
-        },
-        name: 'Dima'
-      }
-    ];
-
     return (
       <View>
-        {friends.map(friend => <Person key={friend.name} attrs={friend} friends={this}/>) }
+        {this.state.friends.map(friend => <Person key={friend.id} attrs={friend} friends={this}/>) }
       </View>
     )
   }
@@ -50,7 +47,6 @@ class Person extends Component {
   }
 
   setCurrent() {
-    console.log(this.props.attrs.name);
     this.props.friends.conversation(this);
   }
 
@@ -59,7 +55,7 @@ class Person extends Component {
       <TouchableHighlight onPress={this.setCurrent.bind(this)}>
         <View>
           <Image
-            source={this.props.attrs.pic}
+            source={{uri: 'https://pp.vk.me/c630130/v630130920/437dc/PYAbX_sMCWY.jpg'}}
             style={{width: 50, height: 50}}
           />
           <Text>{this.props.attrs.name}</Text>
