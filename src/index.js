@@ -9,24 +9,36 @@ import {
 } from 'react-native';
 import {Message} from './components/Message';
 import {Friends} from './components/Friends';
+import {OAuth} from './components/OAuth';
 
 export default class Messenger extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      access_token: '',
+      client_id: 'client_id',
+      redirect_uri: 'https://www.facebook.com/connect/login_success.html',
+      client_secret: 'client_secret'
+    };
+  }
+
+  setToken(access_token) {
+    this.setState({access_token})
   }
 
   renderScene(route, navigator) {
-    console.log(route);
-    console.log(navigator);
-
-    switch(route.title) {
-      case 'Friends':
-        return (<Friends navigator={navigator}/>);
-      case 'Messages':
-        return (<Message navigator={navigator} friend={route.friend}/>);
-      default:
-        return(<Friends />);
-    }
+    if (this.state.access_token.length > 0)
+      switch(route.title) {
+        case 'Friends':
+          return (<Friends navigator={navigator} access_token={this.state.access_token}/>);
+        case 'Messages':
+          return (<Message navigator={navigator} friend={route.friend}/>);
+        default:
+          return(<Friends />);
+      }
+    else
+      return (<OAuth {...this.state} setToken={this.setToken.bind(this)} />);
   }
 
   render() {
@@ -41,7 +53,7 @@ export default class Messenger extends Component {
         <View style={styles.main}>
           <Navigator
             initialRoute={routes[0]}
-            renderScene={this.renderScene}
+            renderScene={this.renderScene.bind(this)}
           />
         </View>
         <Text style={styles.copyright}>© Cats-3x, 2016</Text>
