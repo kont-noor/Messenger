@@ -12,6 +12,7 @@ export class Message extends Component {
   constructor(props) {
     super(props);
 
+    this.fetchMessages();
     messages = this.props.friend.state.messages;
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
@@ -19,6 +20,12 @@ export class Message extends Component {
       messages,
       messagesList: this.ds.cloneWithRows(messages)
     };
+  }
+
+  fetchMessages() {
+    fetch(`https://graph.facebook.com/me/conversations?access_token=${this.props.access_token}`)
+      .then(response => response.json())
+      .then(json => console.log(json));
   }
 
   send(text) {

@@ -33,7 +33,7 @@ export default class Messenger extends Component {
         case 'Friends':
           return (<Friends navigator={navigator} access_token={this.state.access_token}/>);
         case 'Messages':
-          return (<Message navigator={navigator} friend={route.friend}/>);
+          return (<Message navigator={navigator} friend={route.friend} access_token={this.state.access_token}/>);
         default:
           return(<Friends />);
       }

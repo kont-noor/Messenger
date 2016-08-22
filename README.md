@@ -2,6 +2,9 @@
 
 A Facebook messenger
 
+###Note
+Unfortunately FB API does not allow to send messages so the application has no longer sense
+
 ### Install
 
 * Setup the environment
